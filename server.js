@@ -51,6 +51,9 @@ MongoClient.connect('mongodb://priceradmin:bluecakes1@ds061611.mongolab.com:6161
     _db = db //this is our global database object
 })
 
+
+
+
 app.use(bodyParser.json()) // get information from html forms
 app.use(bodyParser.urlencoded({
     extended: true
