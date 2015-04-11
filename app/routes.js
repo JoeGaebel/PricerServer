@@ -2,43 +2,36 @@
 var indico = require('indico.io');
 var unirest = require('unirest');
 
-var batch = [];
-var mileradius = '20';
-var zip = '10022';
-var userid = '18381';
-var limit = '10';
-
 indico.apiKey = "d20bdc8065f1ce9f0ae9d6d395e88a94";
 
 module.exports = function(app) {
 
-// ============================ COUPON DEALZ =======================================
+    // ============================ COUPON DEALZ =======================================
 
-	function creatBatchObject(batch, callback){
-	unirest.get("https://8coupons.p.mashape.com/getdeals?key=ac56993a4bac47e69e55be1139e92da82978fbb07af8caaaf8a2ca17e169f8e044284d90947139a3cdbe307221259bb9&limit=" + limit + "&mileradius=" + mileradius +"&userid=" + userid + "&zip=" + zip + "")
-	.header("X-Mashape-Key", "RN9umwpGbBmshopPwKJXzLDev6qQp1ihzVGjsnvcADyO4o8Zyb")
-	.header("Accept", "application/json")
-	.end(function (result) {
-		for(var i = 0; i < result.body.length;i++){
-			batch[i] = {}
-			batch[i].URL = result.body[i].URL
-			batch[i].name = result.body[i].name
-			batch[i].address =result.body[i].address
-			batch[i].address2 = result.body[i].address2
-			batch[i].phone = result.body[i].phone
-			batch[i].dealTitle = result.body[i].dealTitle
-			batch[i].dealInfo = result.body[i].dealInfo
-			batch[i].expirationDate = result.body[i].expirationDate
-			batch[i].showImageStandardBig = result.body[i].showImageStandardBig
-			batch[i].showImageStandardSmall = result.body[i].showImageStandardSmall
-			batch[i].distance = result.body[i].distance
-		}
-		callback();
-	});
+    function creatBatchObject(batch, callback) {
+        unirest.get("https://8coupons.p.mashape.com/getdeals?key=ac56993a4bac47e69e55be1139e92da82978fbb07af8caaaf8a2ca17e169f8e044284d90947139a3cdbe307221259bb9&limit=" + limit + "&mileradius=" + mileradius + "&userid=" + userid + "&zip=" + zip + "")
+            .header("X-Mashape-Key", "RN9umwpGbBmshopPwKJXzLDev6qQp1ihzVGjsnvcADyO4o8Zyb")
+            .header("Accept", "application/json")
+            .end(function(result) {
 
-	}
-
-    //=============================== DUMMY ===========================================
+                for (var i = 0; i < result.body.length; i++) {
+                    console.log(result.body[i]);
+                    batch[i] = {}
+                    batch[i].URL = result.body[i].URL
+                    batch[i].name = result.body[i].name
+                    batch[i].address = result.body[i].address
+                    batch[i].address2 = result.body[i].address2
+                    batch[i].phone = result.body[i].phone
+                    batch[i].dealTitle = result.body[i].dealTitle
+                    batch[i].dealInfo = result.body[i].dealinfo
+                    batch[i].expirationDate = result.body[i].expirationDate
+                    batch[i].showImageStandardBig = result.body[i].showImageStandardBig
+                    batch[i].showImageStandardSmall = result.body[i].showImageStandardSmall
+                    batch[i].distance = result.body[i].distance
+                }
+                callback();
+            });
+    }
 
     function getMaxProb(indicoObject) {
         var maxObject = {}
@@ -52,14 +45,6 @@ module.exports = function(app) {
                 maxObject.topic = attribute;
             }
         }
-
-
-        // indicoObject.forEach(function(value, index) {
-        //     if (value > maxObject.value) {
-        //         maxObject.value = value;
-        //         maxObject.index = index;
-        //     }
-        // });
 
         return maxObject;
     }
@@ -85,16 +70,20 @@ module.exports = function(app) {
 
     }
 
-    //Batch should be an array of dealInfos
-    var batch = [{
-        dealInfo: "Iran agress to nuclear limits, but key issues are unresolved."
-    }, {
-        dealInfo: "We're supposed to get up to 24 inches of snow in the storm."
-    }];
+    var batch = [];
+    var mileradius = '20';
+    var zip = '10022';
+    var userid = '18381';
+    var limit = '10';
 
-    injectTopicsAndProbability(batch, function(cb) {
-        console.log(batch);
+    creatBatchObject(batch, function() {
+        // console.log(batch);
+        injectTopicsAndProbability(batch, function() {
+            console.log(batch);
+        });
     });
+
+
 
     //use this to check the current user
     app.get('/DUMMY', function(req, res) {
