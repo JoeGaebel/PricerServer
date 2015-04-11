@@ -8,6 +8,8 @@
         "body-parser": "~1.4.2",
         "mongodb": "*",
         "method-override": "~2.0.2",
-        "indico.io": "*"
+        "indico.io": "*",
+        "unirest": "*"
+
     }
 }
