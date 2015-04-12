@@ -11,8 +11,15 @@ var http = require('http')
 db = require('mongoose');
 
 
+
 // DATBASE CRUMS ======================================
 db.connect('mongodb://priceradmin:bluecakes1@ds061611.mongolab.com:61611/pricer');
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 app.use(bodyParser.json()) // get information from html forms
 app.use(bodyParser.urlencoded({
