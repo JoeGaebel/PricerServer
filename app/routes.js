@@ -73,8 +73,8 @@ module.exports = function(app) {
 
 
 
-    app.post('/updateUser/:username', function(req, res) {
-        var username = req.body.params;
+    app.post('/updateUser', function(req, res) {
+        var username = req.body.username;
         console.log(username);
         profileModel.find({
             'username': username

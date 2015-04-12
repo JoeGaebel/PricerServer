@@ -25,8 +25,7 @@ app.use(express.static(__dirname + '/public'))
 // routes ======================================================================
 require('./app/profileSchema.js');
 profileModel = db.model('profileModel', newSchema);
-require('./app/routes.js')(app) // load our routes and pass in our app and fully configured passport
-
+require('./app/routes.js')(app)
 // launch ======================================================================
 app.listen(port)
 console.log('The magic happens on port ' + port)
