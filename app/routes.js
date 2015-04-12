@@ -130,7 +130,7 @@ module.exports = function(app) {
                 //update saved deals
                 savedDealModel.update({
                     'username': username
-                }, savedDeals, {
+                }, savedDeals.deals, {
                     upsert: true
                 }, function(err) {
                     if (!err)
