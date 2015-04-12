@@ -54,6 +54,7 @@ module.exports = function(app) {
     function injectTopicsAndProbability(batch, callback) {
         //Create an array of Deal descriptions
         var dealInfoArray = [];
+        console.log(batch);
         for (var deal in batch)
             dealInfoArray.push(batch[deal].dealInfo);
         //Run dealInfoArray through the batch text tag indico api
