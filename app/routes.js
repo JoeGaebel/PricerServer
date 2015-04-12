@@ -89,20 +89,20 @@ module.exports = function(app) {
         var swipeMultiplier = 10;
         var username = req.body.username;
         //replace with data from req
-        var deals = [{
-            topic: 'wine',
-            topicProb: '1',
-            swipe: true //True is right, false is left
-        }, {
-            topic: 'golf',
-            topicProb: '1',
-            swipe: false
-        }, {
-            topic: 'atheism',
-            topicProb: '1',
-            swipe: true
-        }];
-        //req.body.deals; //array of JSON deals
+        // var deals = [{
+        //     topic: 'wine',
+        //     topicProb: '1',
+        //     swipe: true //True is right, false is left
+        // }, {
+        //     topic: 'golf',
+        //     topicProb: '1',
+        //     swipe: false
+        // }, {
+        //     topic: 'atheism',
+        //     topicProb: '1',
+        //     swipe: true
+        // }];
+        var deals = req.body.deals; //array of JSON deals
 
         //Find specified User
         profileModel.find({
