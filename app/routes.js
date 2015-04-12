@@ -110,11 +110,11 @@ module.exports = function(app) {
 
                     console.log("Hey there JOE!!!!");
                     console.log(deal);
-                    if (deal.swipe == false) {
+                    if (deal.swiped == false) {
                         variance *= -1;
                         console.warn("left swipe!");
                     }
-                    if (deal.swipe == true) {
+                    if (deal.swiped == true) {
                         savedDeals.deals.push(deal);
                         console.warn("right swipe!");
                     }
