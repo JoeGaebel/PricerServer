@@ -59,6 +59,7 @@ module.exports = function(app) {
             .then(function(res) {
                 //For reach deal, find the topic, and assign that to the deal object
                 res.forEach(function(indicoObject, index) {
+                    console.log(indicoObject);
                     var max = getMaxProb(indicoObject);
                     batch[index].topic = max.topic;
                     batch[index].topicProb = max.value;
@@ -70,23 +71,49 @@ module.exports = function(app) {
 
     }
 
-    var batch = [];
+
+
+    app.get('/deals', function(req, res) {
+        var batch = []; //Create an array to inject into
+
+        //Replace below with data from req
+        var mileradius = '20';
+        var zip = '10022';
+        var userid = '18381';
+        var limit = '10';
+
+
+        creatBatchObject(batch, function() { //Load coupons on req params
+            injectTopicsAndProbability(batch, function() { //inject topic and probabilty
+                console.log(batch);
+                res.send(batch); //Send to the phone
+            });
+        });
+
+    });
+
+
+
+
+    /////////////////////////////////TESTING///////////////////////////
+    var batch = []; //Create an array to inject into
+
+    //Replace below with data from req
     var mileradius = '20';
     var zip = '10022';
     var userid = '18381';
     var limit = '10';
 
-    creatBatchObject(batch, function() {
-        // console.log(batch);
-        injectTopicsAndProbability(batch, function() {
+
+    creatBatchObject(batch, function() { //Load coupons on req params
+        injectTopicsAndProbability(batch, function() { //inject topic and probabilty
             console.log(batch);
         });
     });
 
 
 
-    //use this to check the current user
-    app.get('/DUMMY', function(req, res) {
-        res.send(currentUser);
-    });
+
+
+
 }
