@@ -120,7 +120,7 @@ module.exports = function(app) {
 
 
                     //Get variance based on the swipe, and the topic prob
-                    var variance = swipeMultiplier * deal.topicProb;
+                    var variance = Math.floor(swipeMultiplier * deal.topicProb);
                     if (deal.swipe == false) {
                         variance *= -1;
                         console.log("left swipe!");
