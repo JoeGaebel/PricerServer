@@ -171,7 +171,7 @@ module.exports = function(app) {
         var mileradius = '20';
         var zip = '10022';
         var userid = '18381';
-        var limit = '10';
+        var limit = '20';
         var username = req.body.username;
         var adventure = 2;
 
