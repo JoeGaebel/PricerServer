@@ -73,14 +73,42 @@ module.exports = function(app) {
 
 
 
+    app.post('/updateUser', function(req, res) {
+        var username = req.body.username;
+        console.log(username);
+        profileModel.find({
+            'username': username
+        }, function(err, data) {
+            if (data[0]) {
+                res.send("User Exists!");
+                console.log("User exists!");
+            } else {
+                var newUser = new profileModel({
+                    "username": username
+                });
+                newUser.save(function(err) {
+                    if (err) {
+                        res.send(err);
+                        console.log(err);
+                    } else {
+                        res.send("Saved " + newUser);
+                        console.log("Saved " + newUser);
+                    }
+                });
+            }
+        });
+
+    });
+
     app.get('/deals', function(req, res) {
         var batch = []; //Create an array to inject into
-
         //Replace below with data from req
         var mileradius = '20';
         var zip = '10022';
         var userid = '18381';
         var limit = '10';
+
+
 
 
         creatBatchObject(batch, function() { //Load coupons on req params
@@ -105,11 +133,11 @@ module.exports = function(app) {
     var limit = '10';
 
 
-    creatBatchObject(batch, function() { //Load coupons on req params
-        injectTopicsAndProbability(batch, function() { //inject topic and probabilty
-            console.log(batch);
-        });
-    });
+    // creatBatchObject(batch, function() { //Load coupons on req params
+    //     injectTopicsAndProbability(batch, function() { //inject topic and probabilty
+    //         console.log(batch);
+    //     });
+    // });
 
 
 
