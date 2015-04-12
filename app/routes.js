@@ -108,7 +108,8 @@ module.exports = function(app) {
                     //Get variance based on the swipe, and the topic prob
                     var variance = Math.floor(swipeMultiplier * deal.topicProb);
 
-                    // console.log(deal);
+                    console.log("Hey there JOE!!!!");
+                    console.log(deal.swipe);
                     if (deal.swipe == false) {
                         variance *= -1;
                         console.warn("left swipe!");
@@ -131,11 +132,11 @@ module.exports = function(app) {
                 //update saved deals
                 savedDealModel.update({
                     'username': username
-                }, savedDeals.deals, {
+                }, savedDeals, {
                     upsert: true
                 }, function(err) {
                     if (!err)
-                    console.log("Successfully updated savedDeals db");
+                        console.log("Successfully updated savedDeals db");
                     else
                         console.warn(cb);
                 });
