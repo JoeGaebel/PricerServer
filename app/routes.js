@@ -85,9 +85,12 @@ module.exports = function(app) {
         });
     });
 
+    function truncate(number) {
+        return number > 0 ? Math.floor(number) : Math.ceil(number);
+    }
 
     app.post('/updateUser', function(req, res) {
-        var swipeMultiplier = 10;
+        var swipeMultiplier = 20;
         var deals = req.body.deals; //array of JSON deals
         var username = req.body.username;
         //Find specified User
@@ -106,7 +109,7 @@ module.exports = function(app) {
 
 
                     //Get variance based on the swipe, and the topic prob
-                    var variance = Math.floor(swipeMultiplier * deal.topicProb);
+                    var variance = truncate(swipeMultiplier * deal.topicProb);
 
 
                     console.log(deal.swiped);
