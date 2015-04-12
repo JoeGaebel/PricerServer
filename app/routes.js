@@ -11,7 +11,7 @@ module.exports = function(app) {
 
 
     function creatBatchObject(batch, mileradius, zip, userid, limit, callback) {
-        unirest.get("https://8coupons.p.mashape.com/getdeals?key=ac56993a4bac47e69e55be1139e92da82978fbb07af8caaaf8a2ca17e169f8e044284d90947139a3cdbe307221259bb9&limit=" + limit + "&mileradius=" + mileradius + "&userid=" + userid + "&zip=" + zip + "")
+        unirest.get("https://8coupons.p.mashape.com/getdeals?key=5b9381f180229f9b1295884eca55383f9f14891e66cf34bc587f8e92e613246921907e16599eb0e903da33e63223cdc3&limit=" + limit + "&mileradius=" + mileradius + "&userid=" + userid + "&zip=" + zip + "")
             .header("X-Mashape-Key", "RN9umwpGbBmshopPwKJXzLDev6qQp1ihzVGjsnvcADyO4o8Zyb")
             .header("Accept", "application/json")
             .end(function(result) {
@@ -54,10 +54,11 @@ module.exports = function(app) {
     function injectTopicsAndProbability(batch, callback) {
         //Create an array of Deal descriptions
         var dealInfoArray = [];
-        console.log(batch);
+        // console.log(batch);
         for (var deal in batch)
             dealInfoArray.push(batch[deal].dealInfo);
         //Run dealInfoArray through the batch text tag indico api
+        console.log(dealInfoArray);
         indico.batchTextTags(dealInfoArray)
             .then(function(res) {
                 //For reach deal, find the topic, and assign that to the deal object
