@@ -76,7 +76,7 @@ module.exports = function(app) {
 
 
     app.post('/updateUser', function(req, res) {
-        var swipeMultiplier = 5;
+        var swipeMultiplier = 10;
         var username = req.body.username;
         //replace with data from req
         var deals = [{
@@ -136,7 +136,7 @@ module.exports = function(app) {
         var userid = '18381';
         var limit = '10';
         var username = req.body.username;
-        var adventure = 2;
+        var adventure = 1;
 
         //Adjust threshold for relevancy of coupons
         if (adventure == 3)
@@ -159,7 +159,7 @@ module.exports = function(app) {
                         res.send(err);
                         console.log(err);
                     } else {
-                        res.send("Created new user " + newUser.username);
+                        // res.send("Created new user " + newUser.username);
                         console.log("Created new user " + newUser.username);
                     }
                 });
@@ -177,6 +177,7 @@ module.exports = function(app) {
 
                     }
                     res.send(relevantDeals);
+
                     // console.log(relevantDeals);
                 });
             });
