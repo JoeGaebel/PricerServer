@@ -1,5 +1,5 @@
-return new db.Schema({
-    userName: String,
+newSchema = new db.Schema({
+    username: String,
     relevancy: {
         dieting: {
             type: Number,

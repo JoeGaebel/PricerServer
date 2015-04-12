@@ -23,8 +23,8 @@ app.use(express.static(__dirname + '/public'))
 
 
 // routes ======================================================================
-var profileSchema = require('./app/profileSchema.js');
-profileModel = db.model('profilesModel', profileSchema);
+require('./app/profileSchema.js');
+profileModel = db.model('profileModel', newSchema);
 require('./app/routes.js')(app) // load our routes and pass in our app and fully configured passport
 
 // launch ======================================================================
