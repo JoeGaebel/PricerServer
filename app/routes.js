@@ -58,7 +58,6 @@ module.exports = function(app) {
         for (var deal in batch)
             dealInfoArray.push(batch[deal].dealInfo);
         //Run dealInfoArray through the batch text tag indico api
-        console.log(dealInfoArray);
         indico.batchTextTags(dealInfoArray)
             .then(function(res) {
                 //For reach deal, find the topic, and assign that to the deal object
@@ -109,7 +108,7 @@ module.exports = function(app) {
                     //Get variance based on the swipe, and the topic prob
                     var variance = Math.floor(swipeMultiplier * deal.topicProb);
 
-                    console.log(deal);
+                    // console.log(deal);
                     if (deal.swipe == false) {
                         variance *= -1;
                         console.warn("left swipe!");
@@ -136,7 +135,7 @@ module.exports = function(app) {
                     upsert: true
                 }, function(err) {
                     if (!err)
-                        console.log("Successfully updated savedDeals db");
+                    console.log("Successfully updated savedDeals db");
                     else
                         console.warn(cb);
                 });
