@@ -109,7 +109,7 @@ module.exports = function(app) {
                     var variance = Math.floor(swipeMultiplier * deal.topicProb);
 
                     console.log("Hey there JOE!!!!");
-                    console.log(deal.swipe);
+                    console.log(deal);
                     if (deal.swipe == false) {
                         variance *= -1;
                         console.warn("left swipe!");
