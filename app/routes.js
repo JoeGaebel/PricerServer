@@ -8,14 +8,16 @@ module.exports = function(app) {
 
     // ============================ COUPON DEALZ =======================================
 
-    function creatBatchObject(batch, callback) {
+
+
+    function creatBatchObject(batch, mileradius, zip, userid, limit, callback) {
         unirest.get("https://8coupons.p.mashape.com/getdeals?key=ac56993a4bac47e69e55be1139e92da82978fbb07af8caaaf8a2ca17e169f8e044284d90947139a3cdbe307221259bb9&limit=" + limit + "&mileradius=" + mileradius + "&userid=" + userid + "&zip=" + zip + "")
             .header("X-Mashape-Key", "RN9umwpGbBmshopPwKJXzLDev6qQp1ihzVGjsnvcADyO4o8Zyb")
             .header("Accept", "application/json")
             .end(function(result) {
 
                 for (var i = 0; i < result.body.length; i++) {
-                    console.log(result.body[i]);
+                    //   console.log(result.body[i]);
                     batch[i] = {}
                     batch[i].URL = result.body[i].URL
                     batch[i].name = result.body[i].name
@@ -59,7 +61,7 @@ module.exports = function(app) {
             .then(function(res) {
                 //For reach deal, find the topic, and assign that to the deal object
                 res.forEach(function(indicoObject, index) {
-                    console.log(indicoObject);
+                    //  console.log(indicoObject);
                     var max = getMaxProb(indicoObject);
                     batch[index].topic = max.topic;
                     batch[index].topicProb = max.value;
@@ -74,15 +76,82 @@ module.exports = function(app) {
 
 
     app.post('/updateUser', function(req, res) {
+        var swipeMultiplier = 5;
         var username = req.body.username;
-        console.log(username);
+        //replace with data from req
+        var deals = [{
+            topic: 'wine',
+            topicProb: '1',
+            swipe: true
+        }]; //req.body.deals; //array of JSON deals
+
+        //Find specified User
         profileModel.find({
             'username': username
         }, function(err, data) {
             if (data[0]) {
                 res.send("User Exists!");
                 console.log("User exists!");
+
+                //For each deal from phone
+                for (var index in deals) {
+                    var deal = deals[index];
+                    //Get variance based on the swipe, and the topic prob
+                    var variance = swipeMultiplier * deal.topicProb;
+                    if (!deal.swipe)
+                        variance *= -1;
+                    //Update the topic's relevancy
+                    data[0].relevancy[deal.topic] += variance;
+
+                    //Keep the relevancy between 0 and 100 (real quick)
+                    if (data[0].relevancy[deal.topic] < 0)
+                        data[0].relevancy[deal.topic] = 0;
+                    if (data[0].relevancy[deal.topic] > 100)
+                        data[0].relevancy[deal.topic] = 100;
+                }
+
+                //Update the user's relevancy
+                profileModel.update({
+                    'username': username
+                }, {
+                    relevancy: data[0].relevancy
+                }, null, function() {});
+
+
             } else {
+                console.log("Error, user not found!");
+                res.send("User not found!");
+            }
+        });
+
+    });
+
+    app.post('/deals', function(req, res) {
+        var batch = []; //Create an array to inject into
+        //Replace below with data from req
+
+        //Phone must provide radius, zip, userid(the tolken), limit, 
+        // username, and adventure level
+        var mileradius = '20';
+        var zip = '10022';
+        var userid = '18381';
+        var limit = '10';
+        var username = req.body.username;
+        var adventure = 2;
+
+        //Adjust threshold for relevancy of coupons
+        if (adventure == 3)
+            threshold = 0;
+        else if (adventure == 2)
+            threshold = 50; //55 for testing
+        else if (adventure == 1)
+            threshold = 75;
+
+        //Find the user's profile for their relevancy compare
+        profileModel.find({
+            'username': username
+        }, function(err, data) {
+            if (!data[0]) {
                 var newUser = new profileModel({
                     "username": username
                 });
@@ -91,53 +160,31 @@ module.exports = function(app) {
                         res.send(err);
                         console.log(err);
                     } else {
-                        res.send("Saved " + newUser);
-                        console.log("Saved " + newUser);
+                        res.send("Created new user " + newUser.username);
+                        console.log("Created new user " + newUser.username);
                     }
                 });
+                data[0] = newUser;
             }
-        });
+            var relevancy = data[0].relevancy;
+            var relevantDeals = [];
+            creatBatchObject(batch, mileradius, zip, userid, limit, function() { //Load coupons on req params
+                injectTopicsAndProbability(batch, function() { //inject topic and probabilty
+                    for (var index in batch) {
+                        var deal = batch[index];
 
-    });
+                        if (relevancy[deal.topic] >= threshold)
+                            relevantDeals.push(deal);
 
-    app.get('/deals', function(req, res) {
-        var batch = []; //Create an array to inject into
-        //Replace below with data from req
-        var mileradius = '20';
-        var zip = '10022';
-        var userid = '18381';
-        var limit = '10';
-
-
-
-
-        creatBatchObject(batch, function() { //Load coupons on req params
-            injectTopicsAndProbability(batch, function() { //inject topic and probabilty
-                console.log(batch);
-                res.send(batch); //Send to the phone
+                    }
+                    res.send(relevantDeals);
+                    // console.log(relevantDeals);
+                });
             });
         });
-
     });
 
 
-
-
-    /////////////////////////////////TESTING///////////////////////////
-    var batch = []; //Create an array to inject into
-
-    //Replace below with data from req
-    var mileradius = '20';
-    var zip = '10022';
-    var userid = '18381';
-    var limit = '10';
-
-
-    // creatBatchObject(batch, function() { //Load coupons on req params
-    //     injectTopicsAndProbability(batch, function() { //inject topic and probabilty
-    //         console.log(batch);
-    //     });
-    // });
 
 
 
