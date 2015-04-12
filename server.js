@@ -24,18 +24,7 @@ app.use(express.static(__dirname + '/public'))
 
 // routes ======================================================================
 require('./app/routes.js')(app) // load our routes and pass in our app and fully configured passport
-
+require('./app/schema.js')
 // launch ======================================================================
 app.listen(port)
 console.log('The magic happens on port ' + port)
-
-
-// indicoLine(batch)
-// batch.topic
-// batch.probability
-
-// getRevl(batch)
-// batch.relevancy = asdads
-
-
-// res.send()
