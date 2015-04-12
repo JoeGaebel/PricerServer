@@ -121,10 +121,14 @@ module.exports = function(app) {
 
                     //Get variance based on the swipe, and the topic prob
                     var variance = swipeMultiplier * deal.topicProb;
-                    if (!deal.swipe)
+                    if (deal.swipe == false) {
                         variance *= -1;
-                    else
+                        console.log("left swipe!");
+                    }
+                    if (deal.swipe == true) {
                         savedDeals.deals.push(deal);
+                        console.log("right swipe!");
+                    }
 
                     //Update the topic's relevancy
                     data[0].relevancy[deal.topic] += variance;
