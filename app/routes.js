@@ -82,7 +82,7 @@ module.exports = function(app) {
         var deals = [{
             topic: 'wine',
             topicProb: '1',
-            swipe: true
+            swipe: true //True is right, false is left
         }]; //req.body.deals; //array of JSON deals
 
         //Find specified User
@@ -90,9 +90,6 @@ module.exports = function(app) {
             'username': username
         }, function(err, data) {
             if (data[0]) {
-                res.send("User Exists!");
-                console.log("User exists!");
-
                 //For each deal from phone
                 for (var index in deals) {
                     var deal = deals[index];
@@ -115,7 +112,9 @@ module.exports = function(app) {
                     'username': username
                 }, {
                     relevancy: data[0].relevancy
-                }, null, function() {});
+                }, null, function() {
+                    res.send("Successfully updated!");
+                });
 
 
             } else {
