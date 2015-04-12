@@ -87,23 +87,11 @@ module.exports = function(app) {
 
     app.post('/updateUser', function(req, res) {
         var swipeMultiplier = 10;
-        var username = req.body.username;
-        //replace with data from req
-        // var deals = [{
-        //     topic: 'wine',
-        //     topicProb: '1',
-        //     swipe: true //True is right, false is left
-        // }, {
-        //     topic: 'golf',
-        //     topicProb: '1',
-        //     swipe: false
-        // }, {
-        //     topic: 'atheism',
-        //     topicProb: '1',
-        //     swipe: true
-        // }];
         var deals = req.body.deals; //array of JSON deals
-
+        var username = req.body.username;
+        console.log("=======================");
+        console.log(deals);
+        console.log(username);
         //Find specified User
         profileModel.find({
             'username': username
@@ -123,11 +111,11 @@ module.exports = function(app) {
                     var variance = Math.floor(swipeMultiplier * deal.topicProb);
                     if (deal.swipe == false) {
                         variance *= -1;
-                        console.log("left swipe!");
+                        console.warn("left swipe!");
                     }
                     if (deal.swipe == true) {
                         savedDeals.deals.push(deal);
-                        console.log("right swipe!");
+                        console.warn("right swipe!");
                     }
 
                     //Update the topic's relevancy
