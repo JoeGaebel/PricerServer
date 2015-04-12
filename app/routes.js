@@ -89,9 +89,6 @@ module.exports = function(app) {
         var swipeMultiplier = 10;
         var deals = req.body.deals; //array of JSON deals
         var username = req.body.username;
-        console.log("=======================");
-        console.log(deals);
-        console.log(username);
         //Find specified User
         profileModel.find({
             'username': username
@@ -109,6 +106,8 @@ module.exports = function(app) {
 
                     //Get variance based on the swipe, and the topic prob
                     var variance = Math.floor(swipeMultiplier * deal.topicProb);
+
+                    console.log(deal);
                     if (deal.swipe == false) {
                         variance *= -1;
                         console.warn("left swipe!");
