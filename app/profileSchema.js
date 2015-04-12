@@ -1,4 +1,4 @@
-newSchema = new db.Schema({
+profileSchema = new db.Schema({
     username: String,
     relevancy: {
         dieting: {

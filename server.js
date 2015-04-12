@@ -31,9 +31,9 @@ app.use(express.static(__dirname + '/public'))
 
 // routes ======================================================================
 require('./app/profileSchema.js');
-requpre('./app/dealSchema.js');
+require('./app/dealSchema.js');
 savedDealModel = db.model('savedDealModel', dealSchema);
-profileModel = db.model('profileModel', newSchema);
+profileModel = db.model('profileModel', profileSchema);
 require('./app/routes.js')(app)
 // launch ======================================================================
 app.listen(port)

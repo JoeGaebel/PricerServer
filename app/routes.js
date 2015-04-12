@@ -76,13 +76,12 @@ module.exports = function(app) {
     app.post('/getSavedDeals', function(req, res) {
         var username = req.body.username;
         savedDealModel.find({
-            username: username
+            'username': username
         }, function(err, data) {
-
+            if (err)
+                res.send(err);
+            else res.send(data);
         });
-
-
-
     });
 
 
@@ -94,7 +93,16 @@ module.exports = function(app) {
             topic: 'wine',
             topicProb: '1',
             swipe: true //True is right, false is left
-        }]; //req.body.deals; //array of JSON deals
+        }, {
+            topic: 'golf',
+            topicProb: '1',
+            swipe: false
+        }, {
+            topic: 'atheism',
+            topicProb: '1',
+            swipe: true
+        }];
+        //req.body.deals; //array of JSON deals
 
         //Find specified User
         profileModel.find({
@@ -102,12 +110,22 @@ module.exports = function(app) {
         }, function(err, data) {
             if (data[0]) {
                 //For each deal from phone
+
+                var savedDeals = {};
+                savedDeals.username = username;
+                savedDeals.deals = [];
+
                 for (var index in deals) {
                     var deal = deals[index];
+
+
                     //Get variance based on the swipe, and the topic prob
                     var variance = swipeMultiplier * deal.topicProb;
                     if (!deal.swipe)
                         variance *= -1;
+                    else
+                        savedDeals.deals.push(deal);
+
                     //Update the topic's relevancy
                     data[0].relevancy[deal.topic] += variance;
 
@@ -117,6 +135,18 @@ module.exports = function(app) {
                     if (data[0].relevancy[deal.topic] > 100)
                         data[0].relevancy[deal.topic] = 100;
                 }
+
+                //update saved deals
+                savedDealModel.update({
+                    'username': username
+                }, savedDeals, {
+                    upsert: true
+                }, function(err) {
+                    if (!err)
+                        console.log("Successfully updated savedDeals db");
+                    else
+                        console.warn(cb);
+                });
 
                 //Update the user's relevancy
                 profileModel.update({
@@ -147,7 +177,7 @@ module.exports = function(app) {
         var userid = '18381';
         var limit = '10';
         var username = req.body.username;
-        var adventure = 1;
+        var adventure = 2;
 
         //Adjust threshold for relevancy of coupons
         if (adventure == 3)
@@ -170,7 +200,6 @@ module.exports = function(app) {
                         res.send(err);
                         console.log(err);
                     } else {
-                        // res.send("Created new user " + newUser.username);
                         console.log("Created new user " + newUser.username);
                     }
                 });
@@ -188,8 +217,6 @@ module.exports = function(app) {
 
                     }
                     res.send(relevantDeals);
-
-                    // console.log(relevantDeals);
                 });
             });
         });
