@@ -73,6 +73,17 @@ module.exports = function(app) {
 
     }
 
+    app.post('/getSavedDeals', function(req, res) {
+        var username = req.body.username;
+        savedDealModel.find({
+            username: username
+        }, function(err, data) {
+
+        });
+
+
+
+    });
 
 
     app.post('/updateUser', function(req, res) {
