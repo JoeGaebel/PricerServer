@@ -108,13 +108,13 @@ module.exports = function(app) {
                     //Get variance based on the swipe, and the topic prob
                     var variance = Math.floor(swipeMultiplier * deal.topicProb);
 
-                    console.log("Hey there JOE!!!!");
-                    console.log(deal);
-                    if (deal.swiped == false) {
+
+                    console.log(deal.swiped);
+                    if (deal.swiped == 'false') {
                         variance *= -1;
                         console.warn("left swipe!");
                     }
-                    if (deal.swiped == true) {
+                    if (deal.swiped == 'true') {
                         savedDeals.deals.push(deal);
                         console.warn("right swipe!");
                     }
